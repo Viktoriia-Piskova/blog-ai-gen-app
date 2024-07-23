@@ -1,7 +1,15 @@
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+
 export default function TokenPopup() {
-    return <div>
+  return (
+    <div>
       <h1>From token popup</h1>
-     </div>
-      ;
-  }
-  
+    </div>
+  );
+}
+
+export const getServerSideProps = withPageAuthRequired(() => {
+  return {
+    props: {},
+  };
+});
