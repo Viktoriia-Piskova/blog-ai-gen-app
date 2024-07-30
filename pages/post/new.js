@@ -1,20 +1,24 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { AppLayout } from "../../components/AppLayout";
+import { useState } from "react";
+import Markdown from "react-markdown";
 
 export default function NewPost(props) {
-  const handleClick = async () => {
+  const [postContent, setPostContent] = useState("");
+
+  const handleSubmit = async () => {
     const response = await fetch("/api/generatePost", {
       method: "POST",
     });
     const json = await response.json();
-    console.log(json);
+    setPostContent(json.text);
   };
   return (
     <div>
-      <h1>From post/new,js</h1>
-      <button className="btn" onClick={handleClick}>
+      <button className="btn" onClick={handleSubmit}>
         Generate
       </button>
+      <Markdown className="p-2 abg-markdown">{postContent}</Markdown>
     </div>
   );
 }
