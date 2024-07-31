@@ -5,19 +5,48 @@ import Markdown from "react-markdown";
 
 export default function NewPost(props) {
   const [postContent, setPostContent] = useState("");
+  const [topic, setTopic] = useState("");
+  const [keywords, setKeywords] = useState("");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const response = await fetch("/api/generatePost", {
       method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ topic, keywords }),
     });
     const json = await response.json();
-    setPostContent(json.text);
+    setPostContent(json.post.postContent);
   };
   return (
-    <div>
-      <button className="btn" onClick={handleSubmit}>
-        Generate
-      </button>
+    <div className="p-4">
+      <form className="" onSubmit={(e) => handleSubmit(e)}>
+        <div className="">
+          <label>
+            <strong>Generate blog post on the topic of:</strong>
+          </label>
+          <textarea
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            className="block w-full my-2 px-4 py-2 rounded-sm resize-none border-2 border-slate-500"
+          />
+        </div>
+        <div className="">
+          <label>
+            <strong>Targeting the following keywords:</strong>
+          </label>
+          <textarea
+            value={keywords}
+            onChange={(e) => setKeywords(e.target.value)}
+            className="block w-full my-2 px-4 py-2 rounded-sm resize-none border-2 border-slate-500"
+          />
+        </div>
+        <button className="btn" type="submit">
+          Generate
+        </button>
+      </form>
       <Markdown className="p-2 abg-markdown">{postContent}</Markdown>
     </div>
   );
