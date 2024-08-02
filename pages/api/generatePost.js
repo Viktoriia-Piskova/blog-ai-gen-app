@@ -1,8 +1,23 @@
 import { HfInference } from "@huggingface/inference";
+import { getSession, withApiAuthRequired } from "@auth0/nextjs-auth0";
+import clientPromise from "../../lib/mongodb";
 const apiKey = process.env.HF_TOKEN;
 const hf = new HfInference(apiKey);
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
+  const { user } = await getSession(req, res);
+  const client = await clientPromise;
+  const db = client.db("AIBlogGen");
+
+  const userProfile = await db.collection("users").findOne({
+    auth0Id: user.sub,
+  });
+
+  if (!userProfile?.availableTokens) {
+    res.status(403);
+    return;
+  }
+
   if (req.method === "POST") {
     const { topic, keywords } = req.body;
 
@@ -34,6 +49,27 @@ export default async function handler(req, res) {
       postContent = postResult.generated_text;
       title = titleResult.generated_text;
       metaDescription = descriptionResult.generated_text;
+
+      await db.collection("users").updateOne(
+        {
+          auth0Id: user.sub,
+        },
+        {
+          $inc: {
+            availableTokens: -1,
+          },
+        }
+      );
+
+      const post = await db.collection("posts").insertOne({
+        postContent,
+        title,
+        metaDescription,
+        topic,
+        keywords,
+        userId: userProfile._id,
+        created: new Date(),
+      });
       res.status(200).json({ post: { postContent, title, metaDescription } });
     } catch (error) {
       res.status(500).json({ error: "Error generating text" });
@@ -41,4 +77,4 @@ export default async function handler(req, res) {
   } else {
     res.status(405).json({ error: "Method not allowed" });
   }
-}
+});
