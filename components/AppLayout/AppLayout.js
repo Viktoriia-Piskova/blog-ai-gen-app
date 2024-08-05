@@ -12,10 +12,7 @@ export const AppLayout = ({ children }) => {
       <div className="flex flex-col text-white overflow-hidden">
         <div className="bg-slate-800 px-2">
           <Logo />
-          <Link
-            className="btn"
-            href="/post/new"
-          >
+          <Link className="btn" href="/post/new">
             <span className="pl-1">New post</span>
           </Link>
           <Link className="block mt-2 text-center" href="/token-topup">
@@ -51,7 +48,7 @@ export const AppLayout = ({ children }) => {
           )}
         </div>
       </div>
-      <div className="">{children}</div>
+      {children}
     </div>
   );
 };

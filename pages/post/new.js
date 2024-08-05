@@ -2,10 +2,7 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { AppLayout } from "../../components/AppLayout";
 import { useState } from "react";
 import { useRouter } from "next/router";
-// import Markdown from "react-markdown";
-
 export default function NewPost(props) {
-  // const [postContent, setPostContent] = useState("");
   const [topic, setTopic] = useState("");
   const [keywords, setKeywords] = useState("");
   const router = useRouter();
@@ -20,8 +17,6 @@ export default function NewPost(props) {
       body: JSON.stringify({ topic, keywords }),
     });
     const json = await response.json();
-    // setPostContent(json.post.postContent);
-    console.log("Response from news.js: ", json);
     if (json?.postID) {
       router.push(`/post/${json?.postID}`)
     }
@@ -53,7 +48,6 @@ export default function NewPost(props) {
           Generate
         </button>
       </form>
-      {/* <Markdown className="p-2 abg-markdown">{postContent}</Markdown> */}
     </div>
   );
 }

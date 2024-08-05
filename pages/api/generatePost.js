@@ -21,7 +21,7 @@ export default withApiAuthRequired(async function handler(req, res) {
   if (req.method === "POST") {
     const { topic, keywords } = req.body;
 
-    const prompt = `Write a short text about ${topic} with the following comma separated ${keywords}`;
+    const prompt = `Write a text for the blog about ${topic} with the following ${keywords}`;
     const titlePromt = `Write a SEO title about ${topic} with the following ${keywords}`;
     const descriptionPrompt = `Write a SEO description about ${topic} with the following ${keywords}`;
 
@@ -33,7 +33,7 @@ export default withApiAuthRequired(async function handler(req, res) {
       const postResult = await hf.textGeneration({
         model: "gpt2",
         inputs: prompt,
-        parameters: { max_new_tokens: 250 },
+        parameters: { max_new_tokens: 200 },
       });
       const titleResult = await hf.textGeneration({
         model: "gpt2",
