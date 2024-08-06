@@ -70,7 +70,6 @@ export default withApiAuthRequired(async function handler(req, res) {
         userId: userProfile._id,
         created: new Date(),
       });
-      console.log("Generate post: ", post);
       res.status(200).json({ postID: post.insertedId });
     } catch (error) {
       res.status(500).json({ error: "Error generating text" });
