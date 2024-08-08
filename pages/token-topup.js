@@ -15,14 +15,13 @@ export default function TokenPopup() {
 
   return (
     <div className="px-2">
-      <h1>Buy more tokens for $1!</h1>
-      <button className="btn" onClick={handleClick}>
+      <h1 className="text-center">Buy 10 tokens for $1!</h1>
+      <button className="btn max-w-[250px] block m-auto my-9" onClick={handleClick}>
         Add Tokens
       </button>
       <p>Of course, it's a dummy payment; you don't need to enter your real card data!</p>
-      <p>The card number: 4242 4242 4242 4242</p>
+      <p>Use this: 4242 4242 4242 4242</p>
       <p>And yes, the generated posts will have the "made by the free AI API" quality</p>
-      <p>©Like the price, like the quality</p>
     </div>
   );
 }
