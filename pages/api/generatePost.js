@@ -21,6 +21,15 @@ export default withApiAuthRequired(async function handler(req, res) {
   if (req.method === "POST") {
     const { topic, keywords } = req.body;
 
+    if(!topic || !keywords) {
+      res.status(422)
+      return
+    }
+    if(topic.length > 100 || !keywords > 80) {
+      res.status(422)
+      return
+    }
+
     const prompt = `Write a text for the blog about ${topic} with the following ${keywords}`;
     const titlePromt = `Write a SEO title about ${topic} with the following ${keywords}`;
     const descriptionPrompt = `Write a SEO description about ${topic} with the following ${keywords}`;
