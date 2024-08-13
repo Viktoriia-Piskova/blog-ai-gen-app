@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { Logo } from "../Logo";
 import { useContext, useEffect } from "react";
-import  PostsContext  from "../../context/postsContext";
+import PostsContext from "../../context/postsContext";
 
 export const AppLayout = ({
   children,
@@ -15,7 +15,7 @@ export const AppLayout = ({
 }) => {
   const { user } = useUser();
 
-  const { setPostsFromSSR, posts } = useContext(PostsContext);
+  const { setPostsFromSSR, posts, getPosts } = useContext(PostsContext);
 
   useEffect(() => {
     setPostsFromSSR(postsFromSSR);
@@ -46,7 +46,14 @@ export const AppLayout = ({
               {post.topic}
             </Link>
           ))}
-          <div className="hover:underline text-sm text-slate-400 text-center cursor-pointer mt-4">Load more posts</div>
+          <div
+            onClick={() => {
+              getPosts({lastPostDate: posts[posts.length - 1].created});
+            }}
+            className="hover:underline text-sm text-slate-400 text-center cursor-pointer mt-4"
+          >
+            Load more posts
+          </div>
         </div>
         <div className="bg-cyan-800 flex items-center gap-2 border-t border-t-black/50 h-20 px-2 ">
           {" "}
